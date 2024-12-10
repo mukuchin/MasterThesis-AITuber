@@ -1,0 +1,2 @@
+# 100MBを超えるファイルはLFSで管理する
+/MasterThesis-AITuber/lib/python3.12/site-packages/voicevox_core/model/sd0.bin filter=lfs diff=lfs merge=lfs -text
