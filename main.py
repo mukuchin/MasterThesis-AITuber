@@ -2,7 +2,7 @@
 メイン処理
 """
 
-from audio import play_audio
+from audio_generate_replay import play_audio
 
 
 def main():

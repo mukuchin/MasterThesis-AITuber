@@ -6,7 +6,7 @@ import pyaudio
 import wave
 import io
 import requests
-import dify_api_setting
+from dify_api_setting import get_dify_response, user
 from voicevox_core_setting import core, speaker_id
 from user_prompt import query
 
@@ -14,7 +14,7 @@ from user_prompt import query
 def play_audio():
     try:
         # Dify APIにリクエストを送信して応答を取得
-        answer = dify_api_setting.get_dify_response(query, dify_api_setting.user)
+        answer = get_dify_response(query, user)
 
         # モデルが読み込まれていない場合は読み込む
         if not core.is_model_loaded(speaker_id):
