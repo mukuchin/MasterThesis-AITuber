@@ -13,10 +13,10 @@ API_KEY = os.getenv("DIFY_API_KEY")
 # Dify APIのベースURL
 BASE_URL = "https://api.dify.ai/v1/chat-messages"
 # ユーザーのメールアドレス
-user = "haruto.mukuno@gmail.com"
+user_mail = "haruto.mukuno@gmail.com"
 
 
-def get_dify_response(query: str, user: str) -> str:
+def get_dify_response(query: str) -> str:
     """
     Dify APIにリクエストを送信し、応答を取得する関数
     """
@@ -29,7 +29,7 @@ def get_dify_response(query: str, user: str) -> str:
         "inputs": {},
         "query": query,
         "response_mode": "blocking",
-        "user": user,
+        "user": user_mail,
     }
 
     # リクエストを送信
