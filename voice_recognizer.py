@@ -1,3 +1,7 @@
+"""
+録音した音声を認識する
+"""
+
 import pyaudio
 import threading
 import io

@@ -6,22 +6,17 @@ import pyaudio
 import wave
 import io
 import requests
-from dify_api_setting import get_dify_response, user
-from voicevox_core_setting import core, speaker_id
-from user_prompt import query
+from voicevox_core_setter import core, speaker_id
 
 
-def play_audio():
+def talk_response(response):
     try:
-        # Dify APIにリクエストを送信して応答を取得
-        answer = get_dify_response(query, user)
-
         # モデルが読み込まれていない場合は読み込む
         if not core.is_model_loaded(speaker_id):
             core.load_model(speaker_id)
 
         # テキストを合成してwavデータを取得
-        wave_bytes = core.tts(answer, speaker_id)
+        wave_bytes = core.tts(response, speaker_id)
 
         # PyAudioを使用して音声データを再生
         p = pyaudio.PyAudio()

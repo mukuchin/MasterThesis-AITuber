@@ -2,12 +2,16 @@
 メイン処理
 """
 
-from audio_generate_replay import play_audio
+from response_talker import talk_response
+from dify_response_getter import get_dify_response, user
+from user_prompt import query
 
 
 def main():
-    # ユーザーのプロンプトを送信し、取得した応答を音声に変換して再生
-    play_audio()
+    # Dify APIにリクエストを送信して応答を取得
+    response = get_dify_response(query, user)
+    # 応答を音声に変換して再生
+    talk_response(response)
 
 
 if __name__ == "__main__":
