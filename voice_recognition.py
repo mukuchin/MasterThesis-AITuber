@@ -22,29 +22,15 @@ def wait_for_stop_key(stop_key="e"):
             break
 
 
-def play_audio(frames, transcript, rate=44100, channels=1, format=pyaudio.paInt16):
+def record_and_recognize():
     """
-    framesに格納されたオーディオデータを最後まで再生する関数。
-    再生開始直後に、まとめてtranscriptを表示する。
+    1回分の録音→認識のフローを行う。
+    認識に成功すればtranscriptを返す。
+    認識に失敗すればNoneを返す。
     """
-    p = pyaudio.PyAudio()
-    stream = p.open(format=format, channels=channels, rate=rate, output=True)
-    print("録音された音声を再生します...", flush=True)
+    global stop_recording_flag
+    stop_recording_flag = False  # 再録音時にフラグリセット
 
-    # 再生開始直後にテキストをまとめて表示
-    print("=== 音声再生中の認識結果（まとめ） ===", flush=True)
-    print(transcript, flush=True)
-
-    for frame in frames:
-        stream.write(frame)
-
-    stream.stop_stream()
-    stream.close()
-    p.terminate()
-    print("再生終了", flush=True)
-
-
-if __name__ == "__main__":
     # 's'で録音開始トリガー
     print(f"'{start_key}'と入力しEnterで録音開始します。", flush=True)
     while True:
@@ -68,7 +54,7 @@ if __name__ == "__main__":
     t = threading.Thread(target=wait_for_stop_key, args=(stop_key,))
     t.start()
 
-    print("録音開始...録音終了後、音声再生中に認識結果を表示します。", flush=True)
+    print("録音開始...録音終了後、認識結果を表示します。", flush=True)
 
     # stop_recording_flagがTrueになるまで録音ループ
     while not stop_recording_flag:
@@ -98,12 +84,38 @@ if __name__ == "__main__":
     r = sr.Recognizer()
     with sr.AudioFile(buf) as source:
         audio_data = r.record(source)
+
+    # 音声認識中であることを表示
+    print("音声認識中...", flush=True)
+
     try:
         transcript = r.recognize_google(audio_data, language="ja-JP")
     except sr.UnknownValueError:
-        transcript = "[認識できませんでした]"
+        transcript = None
     except sr.RequestError:
         transcript = "[認識リクエストエラー]"
 
-    # 音声再生中にテキストをまとめて表示
-    play_audio(frames, transcript)
+    if transcript is not None and transcript != "[認識リクエストエラー]":
+        print("=== 認識結果 ===", flush=True)
+        print(transcript, flush=True)
+        return transcript
+    else:
+        if transcript is None:
+            print("認識できませんでした。もう一度録音します。", flush=True)
+        else:
+            print(
+                "認識リクエストエラーが発生しました。もう一度録音します。", flush=True
+            )
+        return None
+
+
+if __name__ == "__main__":
+    while True:
+        result = record_and_recognize()
+        if result is not None:
+            # 認識成功
+            print("録音・認識が正常に完了しました。", flush=True)
+            break
+        else:
+            # 認識失敗→もう一度録音
+            continue
