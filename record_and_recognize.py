@@ -14,7 +14,7 @@ def record_and_recognize():
             # 認識成功
             print("=== 認識結果 ===", flush=True)
             print(transcript, flush=True)
-            print("録音・認識が正常に完了しました。", flush=True)
+            print("音声認識が正常に完了しました。", flush=True)
             return transcript
         else:
             # 認識失敗またはリクエストエラー

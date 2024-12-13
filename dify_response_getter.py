@@ -21,6 +21,9 @@ def get_dify_response(query: str) -> str:
     Dify APIにリクエストを送信し、応答を取得する関数
     """
 
+    # 回答を生成していることを表示
+    print("回答生成中...", flush=True)
+
     # ヘッダーの設定
     headers = {"Authorization": f"Bearer {API_KEY}", "Content-Type": "application/json"}
 

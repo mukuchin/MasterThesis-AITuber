@@ -1,8 +1,17 @@
 import pyaudio
 import threading
 
+
 class VoiceRecorder:
-    def __init__(self, start_key='s', stop_key='e', rate=44100, channels=1, chunk=1024, format=pyaudio.paInt16):
+    def __init__(
+        self,
+        start_key="s",
+        stop_key="e",
+        rate=44100,
+        channels=1,
+        chunk=1024,
+        format=pyaudio.paInt16,
+    ):
         self.start_key = start_key
         self.stop_key = stop_key
         self.rate = rate
@@ -36,11 +45,13 @@ class VoiceRecorder:
                 break
 
         p = pyaudio.PyAudio()
-        stream = p.open(format=self.format,
-                        channels=self.channels,
-                        rate=self.rate,
-                        input=True,
-                        frames_per_buffer=self.chunk)
+        stream = p.open(
+            format=self.format,
+            channels=self.channels,
+            rate=self.rate,
+            input=True,
+            frames_per_buffer=self.chunk,
+        )
 
         frames = []
 
@@ -48,7 +59,7 @@ class VoiceRecorder:
         t = threading.Thread(target=self.wait_for_stop_key)
         t.start()
 
-        print("録音開始...録音終了後、認識結果を表示します。", flush=True)
+        print("録音開始", flush=True)
 
         # stop_recording_flagがTrueになるまで録音ループ
         while not self.stop_recording_flag:
