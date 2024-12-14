@@ -8,21 +8,33 @@ from record_and_recognize import record_and_recognize
 
 
 def main():
-    # 録音と音声認識を行い、認識結果を取得
-    transcript = record_and_recognize()
+    # 会話ID
+    conversation_id = ""
 
-    # Dify APIにリクエストを送信して応答, 会話IDを取得
-    response, conversation_id = get_dify_response(transcript)
+    while True:
+        # 録音と音声認識を行い、認識結果を取得
+        transcript = record_and_recognize()
 
-    # <END_OF_CONVERSATION>が含まれている場合はこの文字列を削除
-    response = response.replace("<END_OF_CONVERSATION>", "")
-    print(f"respose: {response}", flush=True)
+        # Dify APIにリクエストを送信して応答, 会話IDを取得
+        response, conversation_id = get_dify_response(transcript, conversation_id)
 
-    # 会話IDを表示
-    print(f"conversation_id: {conversation_id}", flush=True)
+        # <END_OF_CONVERSATION>が含まれている場合は会話終了
+        if "<END_OF_CONVERSATION>" in response:
+            # 含まれている場合は削除
+            response = response.replace("<END_OF_CONVERSATION>", "")
+            print(f"respose: {response}", flush=True)
+            print(f"conversation_id: {conversation_id}", flush=True)
 
-    # 応答を音声に変換して再生
-    talk_response(response)
+            # # 応答を音声に変換して再生
+            # talk_response(response)
+
+            break
+        else:
+            # 含まれていない場合はそのまま処理を続行
+            response = response.replace("<END_OF_CONVERSATION>", "")
+            print(f"respose: {response}", flush=True)
+            print(f"conversation_id: {conversation_id}", flush=True)
+            # talk_response(response)
 
 
 if __name__ == "__main__":
