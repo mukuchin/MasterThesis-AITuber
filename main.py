@@ -22,19 +22,17 @@ def main():
         if "<END_OF_CONVERSATION>" in response:
             # 含まれている場合は削除
             response = response.replace("<END_OF_CONVERSATION>", "")
-            print(f"respose: {response}", flush=True)
-            print(f"conversation_id: {conversation_id}", flush=True)
 
-            # # 応答を音声に変換して再生
-            # talk_response(response)
+            # 応答を音声に変換して再生
+            talk_response(response)
 
             break
         else:
             # 含まれていない場合はそのまま処理を続行
             response = response.replace("<END_OF_CONVERSATION>", "")
-            print(f"respose: {response}", flush=True)
-            print(f"conversation_id: {conversation_id}", flush=True)
-            # talk_response(response)
+
+            # 応答を音声に変換して再生
+            talk_response(response)
 
 
 if __name__ == "__main__":
